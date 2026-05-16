@@ -1,11 +1,12 @@
-FROM richarvey/nginx-php-fpm:latest
+FROM dunglas/frankenphp:php8.3
+
+WORKDIR /app
 
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN php artisan config:clear
-RUN php artisan route:clear
-RUN php artisan view:clear
+ENV SERVER_NAME=:${PORT}
+ENV APP_ENV=production
 
-ENV WEBROOT=/var/www/html/public
+CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0"]
