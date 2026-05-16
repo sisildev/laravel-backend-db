@@ -1,18 +1,19 @@
 FROM composer:2 AS vendor
 
 WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 COPY . .
-RUN composer dump-autoload --optimize
 
-FROM dunglas/frankenphp:php8.3
+RUN composer install --no-dev --optimize-autoloader
+
+FROM php:8.3-cli
 
 WORKDIR /app
+
 COPY --from=vendor /app /app
 
-ENV SERVER_NAME=:80
-EXPOSE 80
+RUN docker-php-ext-install pdo pdo_pgsql
 
-CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=80"]
+EXPOSE 8080
+
+CMD php artisan serve --host=0.0.0.0 --port=8080
