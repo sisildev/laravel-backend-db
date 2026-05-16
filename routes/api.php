@@ -6,6 +6,12 @@ use App\Http\Controllers\Api\PenyakitController;
 use Illuminate\Support\Facades\Route;
 
 // Public
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'API Laravel Railway jalan'
+    ]);
+});
+
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login',    [AuthController::class, 'login']);
 Route::post('/auth/google',   [GoogleAuthController::class, 'login']);
